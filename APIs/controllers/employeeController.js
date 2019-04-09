@@ -51,6 +51,7 @@ router.put('/:id', (req, res) => {
         return res.status(400).send(`No record with given id: ${req.params.id}`)
     }
     var emp = new Employee({
+        _id:req.params.id,
         name: req.body.name,
         position: req.body.position,
         office: req.body.office,
@@ -58,13 +59,12 @@ router.put('/:id', (req, res) => {
     })
     Employee.findByIdAndUpdate(req.params.id, {
         $set: emp
-    }, {
-        new: true
-    },(err,doc)=>{
+    },{new:true},(err,doc)=>{
         if (!err) {
             res.send(doc);
         } else {
             console.log('Error in update data from Employees: ' + JSON.stringify(err, undefined, 2));
+            res.status(500).send(err);
         }
     })
 })
